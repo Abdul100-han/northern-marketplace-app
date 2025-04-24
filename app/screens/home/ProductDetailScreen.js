@@ -63,7 +63,7 @@ export default function ProductDetailScreen({ route }) {
           <Text className="text-lg font-bold mb-2">Seller Information</Text>
           <View className="flex-row items-center">
             <Image 
-              source={require('../../assets/avatar.png')}
+              source={require('../../../assets/avatar.jpg')}
               className="w-12 h-12 rounded-full mr-3"
             />
             <View>

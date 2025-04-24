@@ -19,7 +19,7 @@ export default function ProfileScreen({ navigation }) {
     <ScrollView className="bg-gray-100">
       <View className="items-center p-6 bg-white mb-4">
         <Image
-          source={require('../../assets/avatar.png')}
+          source={require('../../../assets/avatar.jpg')}
           className="w-24 h-24 rounded-full mb-4"
         />
         <Text className="text-xl font-bold">{user?.email || 'Guest'}</Text>

@@ -1,6 +1,6 @@
 import { registerRootComponent } from 'expo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import App from './App';
+import App from '../App';
 
 function Root() {
   return (
