@@ -21,7 +21,12 @@ export default function ProductList({ navigation, title = 'Products', filterByCa
         const querySnapshot = await getDocs(q);
         const productsData = [];
         querySnapshot.forEach((doc) => {
-          productsData.push({ id: doc.id, ...doc.data() });
+          productsData.push({ 
+            id: doc.id, 
+            ...doc.data(),
+            // Ensure image field is properly handled whether it's Base64 or URL
+            image: doc.data().image || doc.data().imageUrl || null
+          });
         });
         setProducts(productsData);
       } catch (error) {
