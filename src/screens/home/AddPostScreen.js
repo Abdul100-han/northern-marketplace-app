@@ -1,24 +1,32 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
-import { useAuth } from '../../context/AuthContext';
-import { db, storage } from '../../config/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import * as yup from 'yup';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db, auth } from '../../config/firebase';
 
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
-  description: Yup.string().required('Description is required'),
-  price: Yup.string().required('Price is required'),
-  category: Yup.string().required('Category is required'),
-  location: Yup.string().required('Location is required'),
+const validationSchema = yup.object().shape({
+  title: yup.string().required('Title is required'),
+  description: yup.string().required('Description is required'),
+  price: yup.string().required('Price is required'),
+  category: yup.string().required('Category is required'),
+  location: yup.string().required('Location is required'),
 });
 
+// Image to Base64 converter
+const convertImageToBase64 = async (uri) => {
+  const response = await fetch(uri);
+  const blob = await response.blob();
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
+};
+
 export default function AddPostScreen() {
-  const { user } = useAuth();
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
 
@@ -27,7 +35,7 @@ export default function AddPostScreen() {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.5, // Reduced quality to limit size
     });
 
     if (!result.canceled) {
@@ -43,27 +51,20 @@ export default function AddPostScreen() {
 
     try {
       setUploading(true);
+      const imageBase64 = await convertImageToBase64(image);
       
-      // Upload image to Firebase Storage
-      const response = await fetch(image);
-      const blob = await response.blob();
-      const storageRef = ref(storage, `products/${Date.now()}`);
-      const snapshot = await uploadBytes(storageRef, blob);
-      const imageUrl = await getDownloadURL(snapshot.ref);
-
-      // Save product data to Firestore
       await addDoc(collection(db, 'products'), {
         title: values.title,
         description: values.description,
         price: values.price,
         category: values.category,
         location: values.location,
-        imageUrl,
-        userId: user.uid,
+        image: imageBase64,
+        userId: auth.currentUser.uid,
         createdAt: serverTimestamp(),
       });
 
-      Alert.alert('Success', 'Product added successfully');
+      Alert.alert('Success', 'Product added successfully!');
       setImage(null);
     } catch (error) {
       Alert.alert('Error', error.message);
@@ -89,6 +90,7 @@ export default function AddPostScreen() {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <View>
+            {/* Image Picker */}
             <TouchableOpacity 
               className="items-center justify-center bg-white rounded-lg p-4 mb-4 h-48 border border-dashed border-gray-300"
               onPress={pickImage}
@@ -103,6 +105,7 @@ export default function AddPostScreen() {
               )}
             </TouchableOpacity>
 
+            {/* Form Fields */}
             <View className="mb-4">
               <Text className="text-gray-700 mb-1">Title</Text>
               <TextInput
