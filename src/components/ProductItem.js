@@ -8,12 +8,17 @@ export default function ProductItem({ product, onPress }) {
       className="w-48 bg-white rounded-lg shadow-sm mr-4 overflow-hidden"
       onPress={onPress}
     >
-      <Image 
-        source={{ uri: product.imageUrl }} 
-        className="w-full h-32" 
-        resizeMode="cover"
-        defaultSource={require('../../assets/products/placeholder.jpg')}
-      />
+      {product.image ? (
+        <Image 
+          source={{ uri: product.image }} 
+          className="w-full h-32" 
+          resizeMode="cover"
+        />
+      ) : (
+        <View className="w-full h-32 bg-gray-200 items-center justify-center">
+          <Ionicons name="image" size={40} color="#9CA3AF" />
+        </View>
+      )}
       
       <View className="p-3">
         <Text className="font-bold text-gray-800 mb-1" numberOfLines={1}>{product.title}</Text>
