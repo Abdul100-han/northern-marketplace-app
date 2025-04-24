@@ -10,25 +10,36 @@ const Stack = createNativeStackNavigator();
 export default function RootStack() {
   return (
     <Stack.Navigator 
-      screenOptions={{ headerShown: false }}
-      initialRouteName="Login" // Start with Login screen
+      initialRouteName="Login"
+      screenOptions={{
+        headerShown: false,
+        animation: 'slide_from_right'
+      }}
     >
+      {/* Auth Stack */}
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
+
+      {/* Main App Stack */}
       <Stack.Screen name="Main" component={MainTab} />
       
-      {/* Add these screens for proper navigation */}
+      {/* Product Screens */}
       <Stack.Screen 
         name="ProductDetail" 
-        component={ProductDetailScreen} 
-        options={{ headerShown: true, title: 'Product Details' }}
+        component={ProductDetailScreen}
+        options={{
+          headerShown: true,
+          headerTitle: 'Product Details',
+          headerBackTitle: 'Back'
+        }}
       />
       <Stack.Screen 
         name="ProductsByCategory" 
         component={ProductsByCategoryScreen}
-        options={({ route }) => ({ 
-          headerShown: true, 
-          title: `${route.params.category} Products` 
+        options={({ route }) => ({
+          headerShown: true,
+          title: `${route.params.category} Products`,
+          headerBackTitle: 'Back'
         })}
       />
     </Stack.Navigator>
