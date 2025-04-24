@@ -1,48 +1,52 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../../config/firebase';
 import ProductItem from './ProductItem';
 
-const products = [
-  {
-    id: 1,
-    title: 'Fresh Tomatoes',
-    price: '₦5,000',
-    location: 'Kano',
-    image: require('../../assets/products/tomatoes.jpg'),
-    rating: 4.5,
-  },
-  {
-    id: 2,
-    title: 'Handwoven Basket',
-    price: '₦3,500',
-    location: 'Kaduna',
-    image: require('../../assets/products/basket.jpg'),
-    rating: 4.2,
-  },
-  {
-    id: 3,
-    title: 'Local Rice (50kg)',
-    price: '₦28,000',
-    location: 'Kebbi',
-    image: require('../../assets/products/rice.jpg'),
-    rating: 4.7,
-  },
-  {
-    id: 4,
-    title: 'Goat',
-    price: '₦45,000',
-    location: 'Sokoto',
-    image: require('../../assets/products/goat.jpg'),
-    rating: 4.3,
-  },
-];
+export default function ProductList({ navigation, title = 'Products', filterByCategory }) {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function ProductList({ navigation, title = 'Products' }) {
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        let q;
+        if (filterByCategory) {
+          q = query(collection(db, 'products'), where('category', '==', filterByCategory));
+        } else {
+          q = query(collection(db, 'products'));
+        }
+        
+        const querySnapshot = await getDocs(q);
+        const productsData = [];
+        querySnapshot.forEach((doc) => {
+          productsData.push({ id: doc.id, ...doc.data() });
+        });
+        setProducts(productsData);
+      } catch (error) {
+        console.error("Error fetching products: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [filterByCategory]);
+
+  if (loading) {
+    return (
+      <View className="p-4">
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <View>
       <View className="flex-row justify-between items-center mb-4">
         <Text className="text-lg font-bold text-gray-800">{title}</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Explore')}>
           <Text className="text-green-600">See All</Text>
         </TouchableOpacity>
       </View>
