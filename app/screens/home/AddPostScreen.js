@@ -15,7 +15,6 @@ const validationSchema = yup.object().shape({
   location: yup.string().required('Location is required'),
 });
 
-// Image to Base64 converter
 const convertImageToBase64 = async (uri) => {
   const response = await fetch(uri);
   const blob = await response.blob();
@@ -26,7 +25,7 @@ const convertImageToBase64 = async (uri) => {
   });
 };
 
-export default function AddPostScreen() {
+export default function AddPostScreen({ navigation }) {
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
 
@@ -35,7 +34,7 @@ export default function AddPostScreen() {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.5, // Reduced quality to limit size
+      quality: 0.5,
     });
 
     if (!result.canceled) {
@@ -62,15 +61,29 @@ export default function AddPostScreen() {
         image: imageBase64,
         userId: auth.currentUser.uid,
         createdAt: serverTimestamp(),
+        keywords: generateKeywords(values.title)
       });
 
       Alert.alert('Success', 'Product added successfully!');
-      setImage(null);
+      navigation.goBack();
     } catch (error) {
       Alert.alert('Error', error.message);
     } finally {
       setUploading(false);
     }
+  };
+
+  const generateKeywords = (title) => {
+    const keywords = [];
+    const titleWords = title.toLowerCase().split(' ');
+    
+    for (let i = 0; i < titleWords.length; i++) {
+      for (let j = i + 1; j <= titleWords.length; j++) {
+        keywords.push(titleWords.slice(i, j).join(' '));
+      }
+    }
+    
+    return keywords;
   };
 
   return (
@@ -90,7 +103,6 @@ export default function AddPostScreen() {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <View>
-            {/* Image Picker */}
             <TouchableOpacity 
               className="items-center justify-center bg-white rounded-lg p-4 mb-4 h-48 border border-dashed border-gray-300"
               onPress={pickImage}
@@ -105,17 +117,17 @@ export default function AddPostScreen() {
               )}
             </TouchableOpacity>
 
-            {/* Form Fields */}
-            <View className="mb-4">
+             {/* Form Fields */}
+           <View className="mb-4">
               <Text className="text-gray-700 mb-1">Title</Text>
-              <TextInput
+             <TextInput
                 className="bg-white p-3 rounded-lg"
                 placeholder="Product title"
                 onChangeText={handleChange('title')}
                 onBlur={handleBlur('title')}
                 value={values.title}
               />
-              {touched.title && errors.title && (
+             {touched.title && errors.title && (
                 <Text className="text-red-500 text-sm mt-1">{errors.title}</Text>
               )}
             </View>
@@ -177,7 +189,7 @@ export default function AddPostScreen() {
                 <Text className="text-red-500 text-sm mt-1">{errors.location}</Text>
               )}
             </View>
-
+            
             <TouchableOpacity
               className="bg-green-600 p-4 rounded-lg items-center"
               onPress={handleSubmit}
