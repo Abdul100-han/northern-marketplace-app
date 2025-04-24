@@ -2,12 +2,12 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 
 const categories = [
-  { id: 1, name: 'Agriculture', icon: require('../../assets/categories/agriculture.png') },
+  { id: 1, name: 'Agriculture', icon: require('../../assets/categories/agriculture.jpg') },
   { id: 2, name: 'Livestock', icon: require('../../assets/categories/livestock.png') },
-  { id: 3, name: 'Textiles', icon: require('../../assets/categories/textiles.png') },
-  { id: 4, name: 'Crafts', icon: require('../../assets/categories/crafts.png') },
-  { id: 5, name: 'Food', icon: require('../../assets/categories/food.png') },
-  { id: 6, name: 'Services', icon: require('../../assets/categories/services.png') },
+  { id: 3, name: 'Textiles', icon: require('../../assets/categories/textiles.jpg') },
+  { id: 4, name: 'Crafts', icon: require('../../assets/categories/crafts.jpg') },
+  { id: 5, name: 'Food', icon: require('../../assets/categories/food.jpeg') },
+  { id: 6, name: 'Services', icon: require('../../assets/categories/services.jpg') },
 ];
 
 export default function CategoryList({ navigation }) {

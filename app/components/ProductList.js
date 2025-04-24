@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../../config/firebase';
+import { db } from '../config/firebase';
 import ProductItem from './ProductItem';
 
 export default function ProductList({ navigation, title = 'Products', filterByCategory }) {

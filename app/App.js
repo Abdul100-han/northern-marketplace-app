@@ -1,8 +1,9 @@
 import React from 'react';
-import { AuthProvider } from './src/context/AuthContext';
-import RootStack from './src/navigation/RootStack';
+import { AuthProvider } from './context/AuthContext';
+import RootStack from './navigation/RootStack';
 import { NativeWindStyleSheet } from 'nativewind';
 import { LogBox } from 'react-native';
+import "../global.css"
 
 // Ignore specific warnings
 LogBox.ignoreLogs([
@@ -12,7 +13,6 @@ LogBox.ignoreLogs([
 NativeWindStyleSheet.setOutput({
   default: 'native',
 });
-
 export default function App() {
   return (
     <AuthProvider>
