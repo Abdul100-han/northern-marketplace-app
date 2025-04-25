@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 
 export default function RootStack() {
   return (
-    <Stack.Navigator 
+    <Stack.Navigator
       initialRouteName="Login"
       screenOptions={{
         headerShown: false,
@@ -17,11 +17,22 @@ export default function RootStack() {
       }}
     >
       {/* Auth Stack */}
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen 
+        name="Login" 
+        component={LoginScreen}
+        options={{ gestureEnabled: false }}
+      />
+      <Stack.Screen 
+        name="SignUp" 
+        component={SignUpScreen}
+      />
 
       {/* Main App Stack */}
-      <Stack.Screen name="Main" component={MainTab} />
+      <Stack.Screen 
+        name="Main" 
+        component={MainTab}
+        options={{ gestureEnabled: false }}
+      />
       
       {/* Product Screens */}
       <Stack.Screen 
@@ -30,7 +41,8 @@ export default function RootStack() {
         options={{
           headerShown: true,
           headerTitle: 'Product Details',
-          headerBackTitle: 'Back'
+          headerBackTitle: 'Back',
+          headerTintColor: '#4CAF50'
         }}
       />
       <Stack.Screen 
@@ -39,7 +51,8 @@ export default function RootStack() {
         options={({ route }) => ({
           headerShown: true,
           title: `${route.params.category} Products`,
-          headerBackTitle: 'Back'
+          headerBackTitle: 'Back',
+          headerTintColor: '#4CAF50'
         })}
       />
     </Stack.Navigator>

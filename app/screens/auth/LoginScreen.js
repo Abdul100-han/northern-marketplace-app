@@ -24,7 +24,7 @@ export default function LoginScreen({ navigation }) {
     >
       <View className="items-center mb-10">
         <Image
-          source={require('../../../assets/logo.png')}
+          source={require('../../../assets/logo.jpg')}
           className="w-32 h-32 mb-4"
         />
         <Text className="text-3xl font-bold text-white">Northern Marketplace</Text>

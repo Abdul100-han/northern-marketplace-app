@@ -2,9 +2,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from '../screens/home/HomeScreen';
 import ExploreScreen from '../screens/home/ExploreScreen';
-import ProfileScreen from '../screens/home/ProfileScreen';
 import AddPostScreen from '../screens/home/AddPostScreen';
-import SearchScreen from '../screens/home/SearchScreen';
+import ProfileScreen from '../screens/home/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,7 +16,7 @@ export default function MainTab() {
 
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Search') {
+          } else if (route.name === 'Explore') {
             iconName = focused ? 'search' : 'search-outline';
           } else if (route.name === 'Add') {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
@@ -29,10 +28,11 @@ export default function MainTab() {
         },
         tabBarActiveTintColor: '#4CAF50',
         tabBarInactiveTintColor: 'gray',
+        headerShown: false,
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="Explore" component={ExploreScreen} />
       <Tab.Screen name="Add" component={AddPostScreen} options={{ title: 'Sell' }} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
