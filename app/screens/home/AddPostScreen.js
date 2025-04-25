@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView, Image ,   KeyboardAvoidingView, Platform } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import * as ImagePicker from 'expo-image-picker';
@@ -119,6 +119,10 @@ export default function AddPostScreen({ navigation }) {
   };
 
   return (
+    <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
     <ScrollView className="p-4 bg-gray-100">
       <Text className="text-2xl font-bold mb-6">Add New Product</Text>
       
@@ -235,5 +239,6 @@ export default function AddPostScreen({ navigation }) {
         )}
       </Formik>
     </ScrollView>
+     </KeyboardAvoidingView>
   );
 }

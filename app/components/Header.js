@@ -22,7 +22,7 @@ export default function Header({ navigation }) {
       
       <View className="items-center">
         <Image
-          source={require('../../assets/logo-small.png')}
+          source={require('../../assets/logo-small.jpg')}
           className="w-10 h-10"
         />
         <Text className="text-green-600 font-bold">Northern Market</Text>
