@@ -42,12 +42,43 @@ export default function AddPostScreen({ navigation }) {
     }
   };
 
-  const handleSubmit = async (values) => {
+  // const handleSubmit = async (values) => {
+  //   if (!image) {
+  //     Alert.alert('Error', 'Please select an image');
+  //     return;
+  //   }
+
+  //   try {
+  //     setUploading(true);
+  //     const imageBase64 = await convertImageToBase64(image);
+      
+  //     await addDoc(collection(db, 'products'), {
+  //       title: values.title,
+  //       description: values.description,
+  //       price: values.price,
+  //       category: values.category,
+  //       location: values.location,
+  //       image: imageBase64,
+  //       userId: auth.currentUser.uid,
+  //       createdAt: serverTimestamp(),
+  //       keywords: generateKeywords(values.title)
+  //     });
+
+  //     Alert.alert('Success', 'Product added successfully!');
+  //     navigation.goBack();
+  //   } catch (error) {
+  //     Alert.alert('Error', error.message);
+  //   } finally {
+  //     setUploading(false);
+  //   }
+  // };
+
+  const handleSubmit = async (values, { resetForm }) => {
     if (!image) {
       Alert.alert('Error', 'Please select an image');
       return;
     }
-
+  
     try {
       setUploading(true);
       const imageBase64 = await convertImageToBase64(image);
@@ -63,8 +94,10 @@ export default function AddPostScreen({ navigation }) {
         createdAt: serverTimestamp(),
         keywords: generateKeywords(values.title)
       });
-
+  
       Alert.alert('Success', 'Product added successfully!');
+      resetForm();
+      setImage(null);
       navigation.goBack();
     } catch (error) {
       Alert.alert('Error', error.message);
@@ -72,7 +105,6 @@ export default function AddPostScreen({ navigation }) {
       setUploading(false);
     }
   };
-
   const generateKeywords = (title) => {
     const keywords = [];
     const titleWords = title.toLowerCase().split(' ');
